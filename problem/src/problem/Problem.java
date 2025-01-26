@@ -18,12 +18,10 @@ public class Problem {
 			int num = val % 10;
 			++arr[num];
 			val /= 10;
-			System.out.println(val);
 		}
 		
 		for (int i = 0; i < arr.length; i++) {
 			System.out.println(arr[i]);
 		}
 	}
-
 }
