@@ -1,17 +1,38 @@
 package problem;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+/*
+ 문제 : 2609(최대공약수와 최소공배수)
+ 시간 : 184ms
+ 풀이 : 유클리드 호제법으로 최대공약수 계산 후, 두 수의 곱을 최대공약수로 나눠 최소공배수 계산
+ */
+
+import java.util.Scanner;
 
 public class Problem {
-	public static void main(String[] args) throws IOException {
-		// 빠른 입력 사용.
-//		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-//		StringTokenizer st = new StringTokenizer(br.readLine());
-//		StringBuilder sb = new StringBuilder();
-//
-//		int N = Integer.parseInt(st.nextToken());
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		int a = sc.nextInt();
+		int b= sc.nextInt();
+		
+		// 최소공배수 계산을 위해 미리 두 수의 곱 계산
+		int val = a * b;
+		
+		// 유클리드 호제법은 a, b에 대해 a가 b보다 크거나 같은 경우에 성립
+		if (a < b) {
+			int tmp = a;
+			a = b;
+			b = tmp;
+		}
+		
+		// 유클리드 호제법으로 최대공약수 계산
+		while(b != 0) {
+			int tmp = b;
+			b = a % b;
+			a = tmp;
+		}
+		
+		System.out.println(a);
+		System.out.println(val / a); //두 수의 곱을 최대공약수로 나눠 최소공배수 계산
 	}
 }
