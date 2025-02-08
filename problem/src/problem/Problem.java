@@ -1,60 +1,46 @@
 package problem;
 
+/*
+ 문제 : 1074(Z)
+ 시간 : 168ms
+ 풀이 : 배열의 크기가 1x1이 될 때까지 행과 열, 방문 번호를 갱신하며 재귀를 수행.
+ 각 재귀함수 수행 시 lenxlen 크기의 배열을 사분면으로 구분하고 전달된 행과 열이 어느 사분면에 해당하는지 파악한 뒤
+ 그에 맞게 행과 열을 갱신한 뒤 방문 번호를 더함. 이후 len / 2, 갱신된 행과 열 변수를 매개변수로 재귀함수를 호출.
+ */
+
 import java.util.Scanner;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
 
 public class Problem {
-	public static int r = 0;
-	public static int c = 0;
 	public static int ans = 0;
-	public static boolean trigger = false;
-	public static int[] dx = {0, 0, 1, 1};
-	public static int[] dy = {0, 1, 0, 1};
 	
-	public static boolean z(int n, int startX, int startY) {
-		if(trigger == true) return true;
-		// Z 모양 탐색을 위해 이동할 방향 배열
-
+	public static void z(int len, int r, int c) {
+		if(len == 1)
+			return;
 		
-		if(n == 1) {
-			for (int i = 0; i < 4; i++) {
-				int nx = startX + dx[i];
-				int ny = startY + dy[i];
-				
-				if(nx == r && ny == c) {
-					trigger = true;
-					return true;
-				}
-				else {
-					ans++;
-				}
-			}
-			
-			return false;
+		if(r < len / 2 && c < len / 2) {
+			z(len / 2, r, c);
 		}
-		
-		for (int i = 0; i < 4; i++) {
-			if(z(n/2, startX + dx[i] * n, startY + dy[i] * n)) {
-				//System.out.println(n / 2 + " " + (startX + dx[i] * n) + " " + (startY + dy[i] * n));
-				return true;
-			}
+		else if(r < len / 2 && c >= len / 2) {
+			ans += len * len / 4;
+			z(len / 2, r, c - len / 2);
 		}
-		
-		return false;
+		else if(r >= len / 2 && c < len / 2) {
+			ans += (len * len / 4) * 2;
+			z(len / 2, r - len / 2, c);
+		}
+		else {
+			ans += (len * len / 4) * 3;
+			z(len / 2, r - len/2, c - len/2);
+		}
 	}
 	
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int N = Integer.parseInt(st.nextToken());
-		r = Integer.parseInt(st.nextToken()); //행
-		c = Integer.parseInt(st.nextToken()); //열
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int N = sc.nextInt();;
+		int r = sc.nextInt();
+		int c = sc.nextInt();
 		
-		if(z((int)Math.pow(2, N-1), 0, 0)) {
-			System.out.println(ans);
-		}
+		z((int)Math.pow(2, N), r, c);
+		System.out.println(ans);
 	}
 }
