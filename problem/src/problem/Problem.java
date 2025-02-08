@@ -1,5 +1,12 @@
 package problem;
 
+/*
+ 문제 : 10845(스택)
+ 시간 : 460ms
+ 풀이 : 문제에서 요구하는 명령어에 맞는 스택 제공 메서드 활용.
+ 입력 형식에 맞는 조건문 분기 설정 및 스택이 비어있는 경우 고려가 필요.
+ */
+
 import java.util.Scanner;
 import java.util.Stack;
 
