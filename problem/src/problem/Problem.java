@@ -1,17 +1,41 @@
 package problem;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+/*
+ 문제 : 2559(수열)
+ 시간 : 680ms
+ 풀이 : 배열을 순회하며 연속 일수 온도 합을 계산하고, 그 중 최댓값을 도출.
+ 연속 일수 온도 합은 슬라이딩 윈도우를 활용.입력 시 첫 연속 일수 온도 합을 구한 다음
+ 배열을 순회하며 이전 연속 일수 온도 합에서 가장 오래된 온도를 빼고 새로운 최근 온도를 더해 계산.
+ */
+
+import java.util.Scanner;
 
 public class Problem {
-	public static void main(String[] args) throws IOException {
-		// 빠른 입력 사용.
-//		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-//		StringTokenizer st = new StringTokenizer(br.readLine());
-//		StringBuilder sb = new StringBuilder();
-//
-//		int N = Integer.parseInt(st.nextToken());
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		int N = sc.nextInt();
+		int K = sc.nextInt();
+		
+		int[] arr = new int[N];
+
+		int sum = 0;
+		for (int i = 0; i < arr.length; i++) {
+			arr[i] = sc.nextInt();
+			
+			if(i < K) sum += arr[i]; // 처음 연속 일수 온도 합 구하기
+		}
+		
+		int ans = sum;
+		// 최대 연속 일수 온도 합 구하기
+		for (int i = K-1; i < arr.length-1; i++) { // 배열을 순회하며 연속 일수 온도 합 계산.
+			// 슬라이딩 윈도우
+			// 한 칸씩 이동하며 가장 왼쪽 한 칸의 온도를 빼고, 가장 오른쪽 한 칸의 온도를 더해 계산.
+			sum += arr[i+1] - arr[i-K+1];
+			
+			ans = Math.max(ans, sum);
+		}
+		
+		System.out.println(ans);
 	}
 }
