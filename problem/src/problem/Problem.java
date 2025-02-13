@@ -1,17 +1,35 @@
 package problem;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.Scanner;
+import java.util.Stack;
 
 public class Problem {
-	public static void main(String[] args) throws IOException {
-		// 빠른 입력 사용.
-//		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-//		StringTokenizer st = new StringTokenizer(br.readLine());
-//		StringBuilder sb = new StringBuilder();
-//
-//		int N = Integer.parseInt(st.nextToken());
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		int TC = sc.nextInt();
+		for (int testCase = 1; testCase <= TC; testCase++) {
+			int K = sc.nextInt();
+			
+			Stack<Integer> st = new Stack<>();
+			
+			for (int i = 0; i < K; i++) {
+				int num = sc.nextInt();
+				
+				if (num == 0) {
+					st.pop();
+				}
+				else {
+					st.push(num);
+				}
+			}
+			
+			int ans = 0;
+			while (!st.empty()) {
+				ans += st.pop();
+			}
+			
+			System.out.println("#" + testCase + " " + ans);
+		}
 	}
 }
