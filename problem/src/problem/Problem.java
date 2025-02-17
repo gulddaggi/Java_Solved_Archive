@@ -7,147 +7,104 @@ import java.util.Queue;
 import java.util.Scanner;
 
 public class Problem {
+	static List<Integer>[] graph;
+	static int N, total;
+	static int[] popularity;
+	static boolean[] selected;
+	static int ans = 100000;
+	
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		
-		int N = sc.nextInt();
-		int[] popularity = new int[N+1];
-		int[][] graph = new int[N+1][N+1];
+		N = sc.nextInt();
+		popularity = new int[N+1];
+		graph = new ArrayList[N+1];
+		selected = new boolean[N+1];
 		
-		int total = 0;
+		// 인구 입력 및 전체 인구 합 저장
 		for (int i = 1; i <= N; i++) {
 			popularity[i] = sc.nextInt();
 			total += popularity[i];
+			graph[i] = new ArrayList<>();
 		}
-		
+			
+		// 그래프 입력
 		for (int i = 1; i <= N; i++) {
 			int edgeCount = sc.nextInt();
 			
 			for (int j = 0; j < edgeCount; j++) {
 				int num = sc.nextInt();
-				graph[i][num] = 1;
+				graph[i].add(num);
 			}
 		}
 		
-		// 모두 탐색가능인지 체크
-		// 최소값
-		int ans = 10000;
+		divide(1);
 		
-		for (int i = 1; i <= N; i++) {
-			System.out.println("-------" + i + "-------");
-			boolean[] isVisit = new boolean[N+1];
-			boolean[] inCycle = new boolean[N+1];
-			int count = 0;
+		if (ans == 100000) {
+			System.out.println(-1);
+		}
+		else {
+			System.out.println(ans);
+		}
+	}
+	
+	static void divide(int idx) {
+		if (idx > N) {
+			List<Integer> groupA = new ArrayList<>();
+			List<Integer> groupB = new ArrayList<>();
 			
-			// 선거구 구분 시작
-			Queue<Integer> q = new LinkedList<>();
-			q.add(i);
-			isVisit[i] = true;
+			for (int i = 1; i <= N; i++) {
+				if (selected[i]) groupA.add(i);
+				else groupB.add(i);
+			}
 			
-			int val = 0;
-			while (!q.isEmpty()) {
-				int cur = q.poll();
-				
-				System.out.println("현재 노드 : " + cur);
-				
-				++count;
-				inCycle[cur] = true;
-				
-				// 가능한 방법인지 체크
-				// 선거구를 빼고 모두 탐색이 가능한지 체크
-				int cycleCount = 0;
-				
-				boolean isCycle = false;
-				for (int j = 1; j <= N; j++) {
-					// 이미 선거구인 정점 제외
-					if (inCycle[j]) {
-						continue;
-					}
+			// 두 그룹 모두 하나 이상 포함
+			if (!groupA.isEmpty() && !groupB.isEmpty()) {
+				// 두 그룹이 모두 접근 가능한가
+				if (isConnected(groupA, true) && isConnected(groupB, false)) {
+					int popA = 0;
+					for (Integer num : groupA) popA += popularity[num];
 					
-					// 현재 사이클 판단 루프에서 방문 여부 파악
-					boolean[] cycleIsVisit = new boolean[N+1];
+					int popB = total - popA;
 					
-					Queue<Integer> cycleQ = new LinkedList<>();
-					cycleQ.add(j);
-					cycleIsVisit[j] = true;
-					
-					// 방문하지 않은 노드 대상으로 bfs 수행
-					while (!cycleQ.isEmpty()) {
-						int curCycleNode = cycleQ.poll();
-						
-						// 사이클 정점 개수 증가
-						++cycleCount;
-						
-						for (int k = 1; k <= N; k++) {
-							// 이미 선거구인 정점
-							if (inCycle[k]) {
-								cycleIsVisit[k] = true;
-								continue;
-							}
-							
-							// 현재 사이클 판단 루프에서 방문한 정점
-							if (cycleIsVisit[k]) {
-								continue;
-							}
-							
-							// 현재 정점에서 방문할 수 없는 정점
-							if (graph[curCycleNode][k] != 1) {
-								continue;
-							}
-							
-							cycleQ.add(k);
-							cycleIsVisit[k] = true;
-						}
-					}
-					
-					if (cycleCount == N - count) {
-						isCycle = true;
-						break;
-					}
-				}
-				
-				val += popularity[cur];
-
-				// 가능한 방법인 경우
-				if (isCycle) {
-					System.out.println("이외 구역의 사이클 형성 가능");
-					// 최소값 갱신
-					
-					ans = Math.min(ans, total - val);
-				}
-				else {
-					System.out.println("사이클 형성 안됨");
-				}
-				
-				// bfs 수행
-				for (int j = 1; j <= N; j++) {
-					System.out.println("v : " + j);
-					
-					if (isVisit[j]) {
-						System.out.println("이미 방문");
-						continue;
-					}
-					
-					if (graph[cur][j] != 1) {
-						System.out.println("연결 안됨");
-						continue;
-					}
-					
-					System.out.println(j + " 를 큐에 삽입");
-					q.add(j);
-					isVisit[j] = true;
+					ans = Math.min(ans, Math.abs(popA - popB));
 				}
 			}
 			
-			if (count != N) {
-				System.out.println(-1);
-				return;
-			}
-			else {
-				System.out.println(ans);
+			return;
+		}
+		
+		// 백트래킹 수행
+		selected[idx] = true;
+		divide(idx + 1);
+		selected[idx] = false;
+		divide(idx + 1);
+	}
+	
+	static boolean isConnected(List<Integer> group, boolean isGroupA) {
+		Queue<Integer> q = new LinkedList<>();
+		boolean[] isVisit = new boolean[N+1];
+		
+		q.add(group.get(0));
+		isVisit[group.get(0)] = true;
+		
+		// 연결 여부 판단 변수
+		int count = 0;
+		
+		while (!q.isEmpty()) {
+			int cur = q.poll();
+			count++;
+			
+			for (int num : graph[cur]) {
+				// 해당 노드를 방문하지 않았으며 노드가 현재 그룹에 속할 경우 노드 추가
+				if (!isVisit[num] && selected[num] == isGroupA) {
+					isVisit[num] = true;
+					q.add(num);
+				}
 			}
 		}
 		
-		
+		// 리스트 크기만큼 탐색이 되었을 때 그룹 성립
+		return count == group.size();
 	}
 }
