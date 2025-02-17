@@ -1,8 +1,7 @@
 package problem;
 
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Scanner;
+import java.util.Stack;
 
 public class Problem {
 	public static void main(String[] args) {
@@ -22,30 +21,28 @@ public class Problem {
 			graph[en][st] = 1;			
 		}
 		
-		Queue<Integer> q = new LinkedList<>();
+		Stack<Integer> st = new Stack<>();
 		
-		q.add(1);
 		isVisit[1] = true;
+		st.push(1);
 		
 		int ans = 0;
-		while (!q.isEmpty()) {
-			int cur = q.poll();
+		while (!st.isEmpty()) {
+			int cur = st.pop();
 			
-			
-			for (int i = 0; i < graph[cur].length; i++) {
+			for (int i = graph[cur].length-1; i >= 0; i--) {
 				if (isVisit[i]) {
 					continue;
 				}
 				
 				if (graph[cur][i] == 1) {
 					isVisit[i] = true;
-					q.add(i);
+					st.push(i);
 					++ans;
 				}
 			}
 		}
 		
 		System.out.println(ans);
-		
 	}
 }
