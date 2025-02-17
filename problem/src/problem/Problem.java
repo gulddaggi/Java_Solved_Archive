@@ -1,31 +1,17 @@
 package problem;
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Problem {
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		
-		int n = sc.nextInt();
-		
-		int[] arr = new int[n+1];
-		
-		for (int i = 1; i <= n; i++) {
-			if (i <= 3) {
-				arr[i] = i;
-			}
-			else {
-				int val = arr[i-1];
-				for (int j = 1; j < i; j++) {
-					if (i % j == 0 && i / j >= j) {
-						++val;
-					}
-				}
-				
-				arr[i] = val;
-			}
-		}
-		
-		System.out.println(arr[n]);
+	public static void main(String[] args) throws IOException {
+		// 빠른 입력 사용.
+//		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//		StringTokenizer st = new StringTokenizer(br.readLine());
+//		StringBuilder sb = new StringBuilder();
+//
+//		int N = Integer.parseInt(st.nextToken());
 	}
 }
