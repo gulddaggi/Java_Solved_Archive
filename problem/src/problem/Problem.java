@@ -11,12 +11,12 @@ public class Problem {
 		for (int testCase = 1; testCase <= 10; testCase++) {
 			int N = sc.nextInt();
 			
-			Queue<String> password = new LinkedList<>();
+			LinkedList<String> list = new LinkedList<>();
 			
 			for (int i = 0; i < N; i++) {
 				String str = sc.next();
 				
-				password.add(str);
+				list.add(str);
 			}
 			
 			N = sc.nextInt();
@@ -26,28 +26,16 @@ public class Problem {
 				int x = sc.nextInt();
 				int y = sc.nextInt();
 				
-				Queue<String> temp = new LinkedList<>();
-				
-				while (x-- != 0) {
-					temp.add(password.poll());
-				}
-				
 				for (int j = 0; j < y; j++) {
 					String addStr = sc.next();
 					
-					temp.add(addStr);
+					list.add(x + j, addStr);
 				}
-				
-				while (!password.isEmpty()) {
-					temp.add(password.poll());
-				}
-				
-				password = temp;
 			}
 			
 			System.out.print("#" + testCase + " ");
 			for (int i = 0; i < 10; i++) {
-				System.out.print(password.poll() + " ");
+				System.out.print(list.pop() + " ");
 			}
 			System.out.println();
 		}
