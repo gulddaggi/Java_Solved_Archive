@@ -1,17 +1,38 @@
 package problem;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
 public class Problem {
-	public static void main(String[] args) throws IOException {
-		// 빠른 입력 사용.
-//		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-//		StringTokenizer st = new StringTokenizer(br.readLine());
-//		StringBuilder sb = new StringBuilder();
-//
-//		int N = Integer.parseInt(st.nextToken());
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		int T = sc.nextInt();
+		for (int testCase = 1; testCase <= T; testCase++) {
+			int N = sc.nextInt();
+			int M = sc.nextInt();
+			
+			int[] countArr = new int[N+M+1];
+			
+			for (int i = 1; i <= N; i++) {
+				for (int j = 1; j <= M; j++) {
+					++countArr[i+j];
+				}
+			}
+			
+			int maxVal = 0;
+			for (int i = 2; i <= N+M; i++) {
+				if (countArr[i] >= maxVal) {
+					maxVal = countArr[i];
+				}
+			}
+			
+			System.out.print("#" + testCase + " ");
+			for (int i = 2; i <= N+M; i++) {
+				if (countArr[i] == maxVal) {
+					System.out.print(i + " ");
+				}
+			}
+			System.out.println();
+		}
 	}
 }
