@@ -1,17 +1,27 @@
 package problem;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
 public class Problem {
-	public static void main(String[] args) throws IOException {
-		// 빠른 입력 사용.
-//		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-//		StringTokenizer st = new StringTokenizer(br.readLine());
-//		StringBuilder sb = new StringBuilder();
-//
-//		int N = Integer.parseInt(st.nextToken());
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		while (true) {
+			String str = sc.nextLine();
+			if (str.equals("#")) {
+				break;
+			}
+			
+			int ans = 0;
+			for (int i = 0; i < str.length(); i++) {
+				if (str.charAt(i) == ' ') {
+					continue;
+				}
+				
+				ans += (i+1) * (str.charAt(i) - 'A' + 1);
+			}
+			
+			System.out.println(ans);
+		}
 	}
 }
