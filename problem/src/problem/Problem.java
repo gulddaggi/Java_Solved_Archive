@@ -16,6 +16,7 @@ public class Problem {
 		
 		char[][] arr = new char[5][];
 		
+		// 배열 입력과 동시에 가장 긴 열의 길이 저장
 		int maxCol = 0;
 		for (int i = 0; i < arr.length; i++) {
 			arr[i] = sc.next().toCharArray();
@@ -23,9 +24,10 @@ public class Problem {
 			maxCol = Math.max(maxCol, arr[i].length);
 		}
 		
-		for (int i = 0; i < maxCol; i++) {
-			for (int j = 0; j < arr.length; j++) {
-				if (i >= arr[j].length) {
+		// 배열 세로방향 출력
+		for (int i = 0; i < maxCol; i++) { // 가장 긴 열까지 순회
+			for (int j = 0; j < arr.length; j++) { // 모든 행 순회
+				if (i >= arr[j].length) { // 현재 행 배열이 해당 열을 인덱스로 가질 수 없는 경우 패스
 					continue;
 				}
 				
