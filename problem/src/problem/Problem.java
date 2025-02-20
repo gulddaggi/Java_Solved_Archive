@@ -1,5 +1,11 @@
 package problem;
 
+/*
+ 문제 : 2606(바이러스)
+ 시간 : 192ms
+ 풀이 : 1번 컴퓨터부터 bfs 혹은 dfs를 통해 1번에서 도달 가능한 컴퓨터 개수를 파악.
+ */
+
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -23,26 +29,30 @@ public class Problem {
 		
 		Stack<Integer> st = new Stack<>();
 		
-		isVisit[1] = true;
 		st.push(1);
 		
 		int ans = 0;
 		while (!st.isEmpty()) {
 			int cur = st.pop();
 			
-			for (int i = graph[cur].length-1; i >= 0; i--) {
+			if (isVisit[cur]) {
+				continue;
+			}
+			
+			isVisit[cur]= true;
+			++ans;
+			
+			for (int i = 1; i < graph[cur].length; i++) {
 				if (isVisit[i]) {
 					continue;
 				}
 				
 				if (graph[cur][i] == 1) {
-					isVisit[i] = true;
 					st.push(i);
-					++ans;
 				}
 			}
 		}
 		
-		System.out.println(ans);
+		System.out.println(ans-1);
 	}
 }
