@@ -1,31 +1,16 @@
 package problem;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
 
 class Pos{
-	int x;
-	int y;
+	int row;
+	int col;
 	
-	public Pos(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
-}
-
-class Fish{
-	Pos pos;
-	int size;
-	boolean isDead;
-	
-	public Fish(Pos pos, int size) {
-		this.pos = pos;
-		this.size = size;
-		isDead = false;
+	public Pos(int row, int col) {
+		this.row = row;
+		this.col = col;
 	}
 }
 
@@ -42,46 +27,35 @@ public class Problem {
 		int[] dy = {0, -1, 1, 0};
 		
 		int[][] ocean = new int[N][N];
-		boolean canEat = false;
-		List<Fish> fishList = new ArrayList<>();
+		int[] fishes = new int[7];
 		
 		Pos start = new Pos(0, 0);
 		
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				ocean[i][j] = sc.nextInt();
+		for (int row = 0; row < N; row++) {
+			for (int col = 0; col < N; col++) {
+				ocean[row][col] = sc.nextInt();
 				
-				if (ocean[i][j] > 0) {
-					if (ocean[i][j] == 9) {
-						start = new Pos(i, j);
-						ocean[i][j] = 0;
+				if (ocean[row][col] > 0) {
+					if (ocean[row][col] == 9) {
+						start = new Pos(row, col);
+						ocean[row][col] = 0;
 					}
 					else {
-						Fish fish = new Fish(new Pos(i, j), ocean[i][j]);
-						fishList.add(fish);
-						
-						if (ocean[i][j] < size) {
-							canEat = true;
-						}
+						++fishes[ocean[row][col]];
 					}
 				}
 			}
 		}
 		
-		Pos target = new Pos(0, 0);
-		int targetIdx = 0;
-		
+		boolean canEat = false;
 		while (true) {
+			Pos target = null;
+			
 			canEat = false;
-			for (int i = 0; i < fishList.size(); i++) {
-				if (fishList.get(i).isDead || fishList.get(i).size >= size) {
-					continue;
+			for (int i = 1; i < fishes.length; i++) {
+				if (fishes[i] > 0 && i < size) {
+					canEat = true;
 				}
-				
-				target.x = fishList.get(i).pos.x;
-				target.y = fishList.get(i).pos.y;
-				targetIdx = i;
-				canEat = true;
 			}
 			
 			if (!canEat) {
@@ -93,31 +67,43 @@ public class Problem {
 			
 			Queue<Pos> q = new LinkedList<>();
 			q.add(start);
-			temp[start.x][start.y] = 1;
+			temp[start.row][start.col] = 1;
 
 			while (!q.isEmpty()) {
 				Pos cur = q.poll();
 				
-				if (cur.x == target.x && cur.y == target.y) {
-					ans += (temp[cur.x][cur.y] - 1);
-					
-					--count;
-					
-					if (count == 0) {
-						++size;
-						count = size;
+				if (ocean[cur.row][cur.col] > 0 && ocean[cur.row][cur.col] < size) {					
+					if (target == null) {
+						target = cur;
 					}
-					
-					fishList.get(targetIdx).isDead = true;
-					
-					start.x = cur.x;
-					start.y = cur.y;
-					break;
+					else {
+						int targetDist = temp[target.row][target.col];
+						int curDist = temp[cur.row][cur.col];
+						
+						if (targetDist < curDist) {
+							continue;
+						}
+						else {
+							if (targetDist > curDist) {
+								target = cur;
+							}
+							else {
+								if (target.row == cur.row ) {
+									if (target.col > cur.col) {
+										target = cur;
+									}
+								}
+								else if (target.row > cur.row) {
+									target = cur;
+								}
+							}
+						}
+					}
 				}
 				
 				for (int i = 0; i < 4; i++) {
-					int nx = cur.x + dx[i];
-					int ny = cur.y + dy[i];
+					int nx = cur.row + dx[i];
+					int ny = cur.col + dy[i];
 					
 					if (nx < 0 || nx >= N || ny < 0 || ny >= N) continue;
 					
@@ -125,10 +111,30 @@ public class Problem {
 
 					if (temp[nx][ny] > 0) continue;
 					
-					temp[nx][ny] = temp[cur.x][cur.y] + 1;
+					temp[nx][ny] = temp[cur.row][cur.col] + 1;
 					q.add(new Pos(nx, ny));
 				}
 			}
+			
+			if (target == null) {
+				System.out.println(ans);
+				break;
+			}
+			
+			ans += (temp[target.row][target.col] - 1);
+			
+			--fishes[ocean[target.row][target.col]];
+			ocean[target.row][target.col] = 0;
+			
+			--count;
+		
+			if (count == 0) {
+				++size;
+				count = size;
+			}
+			
+			start.row = target.row;
+			start.col = target.col;
 		}
 	}
 }
