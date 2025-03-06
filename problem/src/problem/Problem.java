@@ -5,7 +5,6 @@ import java.util.Scanner;
 public class Problem {
 	static int[] A = new int[1000000];
 	static int N = A.length;
-	static int[] temp = new int[N];
 	
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
@@ -14,47 +13,45 @@ public class Problem {
 			A[i] = sc.nextInt();
 		}
 		
-		mergeSort(0, N-1);
+		quickSort(0, N-1);
+		
 		System.out.println(A[500000]);
 	}
 	
-	static void mergeSort(int start, int end) {
+	static void quickSort(int start, int end) {
 		if (start < end) {
-			int mid = (start+end) / 2;
-			mergeSort(start, mid);
-			mergeSort(mid+1, end);
-			merge(start, mid, end);
+			int pivot = partition(start, end);
+			quickSort(start, pivot - 1);
+			quickSort(pivot+1, end);
 		}
 	}
 	
-	static void merge(int start, int mid, int end) {
-		int L = start;
-		int R = mid + 1;
+	static int partition(int start, int end) {
+		int pivot = A[start];
 		
-		int idx = start;
+		int L = start + 1;
+		int R = end;
 		
-		while (L <= mid && R <= end) {
-			if (A[L] <= A[R]) {
-				temp[idx++] = A[L++];
+		while (L <= R) {
+			while (L <= R && A[L] <= pivot) {
+				L++;
 			}
-			else {
-				temp[idx++] = A[R++];
+			
+			while (A[R] > pivot) {
+				R--;
+			}
+			
+			if (L < R) {
+				int tmp = A[L];
+				A[L] = A[R];
+				A[R] = tmp;
 			}
 		}
 		
-        if (L <= mid) {
-        	for (int i = L; i <= mid; i++) {
-            	temp[idx++] = A[i];
-            }
-        }
-        else {
-        	for (int i = R; i <= end; i++) {
-            	temp[idx++] = A[i];
-            }
-        }
+		int tmp = A[start];
+		A[start] = A[R];
+		A[R] = tmp;
 		
-		for (int i = start; i <= end; i++) {
-        	A[i] = temp[i];
-        }
+		return R;
 	}
 }
