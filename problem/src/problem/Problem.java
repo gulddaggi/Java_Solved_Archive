@@ -1,17 +1,20 @@
 package problem;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
 public class Problem {
-	public static void main(String[] args) throws IOException {
-		// 빠른 입력 사용.
-//		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-//		StringTokenizer st = new StringTokenizer(br.readLine());
-//		StringBuilder sb = new StringBuilder();
-//
-//		int N = Integer.parseInt(st.nextToken());
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		while (true) {
+			int first = sc.nextInt();
+			int second = sc.nextInt();
+			
+			if (first == 0) break;
+			
+			if (second % first == 0) System.out.println("factor");
+			else if (first % second == 0) System.out.println("multiple");
+			else System.out.println("neither");
+		}
 	}
 }
