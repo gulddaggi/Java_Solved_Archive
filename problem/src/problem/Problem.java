@@ -1,17 +1,33 @@
 package problem;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
 public class Problem {
-	public static void main(String[] args) throws IOException {
-		// 빠른 입력 사용.
-//		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-//		StringTokenizer st = new StringTokenizer(br.readLine());
-//		StringBuilder sb = new StringBuilder();
-//
-//		int N = Integer.parseInt(st.nextToken());
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		int N = sc.nextInt();
+		String str = sc.next();
+		String gori = new String("gori");
+		
+		boolean isGori = false;
+		for (int i = 0; i < N-gori.length()+1; i++) {
+			for (int j = 0; j < gori.length(); j++) {
+				if (str.charAt(i+j) != gori.charAt(j)) {
+					break;
+				}
+				
+				if (j == gori.length()-1) {
+					isGori = true;
+				}
+			}
+		}
+		
+		if (isGori) {
+			System.out.println("YES");
+		}
+		else {
+			System.out.println("NO");
+		}
 	}
 }
