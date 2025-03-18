@@ -37,15 +37,11 @@ public class Problem {
 					st.add(cur);
 					// k 저장
 					int tmp = S.charAt(idx-1) - '0';
-					
-					System.out.println("k : " + tmp);
-					
+										
 					// 인덱스 이동
 					++idx;
 					// 압축 해제 수행
 					count += unZip(tmp);
-					
-					System.out.println("count : " + count);
 				}
 			}
 			// 닫는 괄호
@@ -54,24 +50,15 @@ public class Problem {
 				if (!st.isEmpty()) {
 					// 괄호 쌍 제거
 					st.pop();
-					
-					System.out.println("k : " + k + ", num : " + (k * count - 2));
-					
-					System.out.println("ans : " + ans);
-					
+						
 					// k와 여는괄호 계산 후 반환
 					return (k * count - 2);
 				}
 				// 여는 괄호가 없으면 단일 카운팅
-				else {
-					++count;
-				}
+				else ++count;
 			}
 			// 숫자
-			else {
-				// 카운팅
-				++count;
-			}
+			else ++count;
 			
 			// 인덱스 이동
 			++idx;
