@@ -9,14 +9,20 @@ import java.util.StringTokenizer;
 
 class Block{
 	int m;
+	int s;
+	int d;
+	boolean isSame;
 	List<Integer> idxList;
 	
 	public Block() {
 		
 	}
 	
-	public Block(int m) {
+	public Block(int m, int s, int d) {
 		this.m = m;
+		this.s = s;
+		this.d = d;
+		isSame = true;
 		idxList = new ArrayList<>();
 	}
 }
@@ -80,20 +86,36 @@ public class Problem {
 					continue;
 				}
 				
-				fireBall.r = (fireBall.r + dRow[fireBall.d] * fireBall.s) % N;
-				fireBall.c = (fireBall.r + dCol[fireBall.d] * fireBall.s) % N;
+				// 이동 위치 계산
+				fireBall.r = fireBall.r + (dRow[fireBall.d] * fireBall.s) % N;
+				fireBall.c = fireBall.c + (dCol[fireBall.d] * fireBall.s) % N;
 				
+				// 범위 초과 고려
+				if (fireBall.r >= N) {
+					fireBall.r %= N;
+				}
+				else if (fireBall.r < 0) {
+					fireBall.r = N + fireBall.r;
+				}
 				
+				if (fireBall.c >= N) {
+					fireBall.c %= N;
+				}
+				else if (fireBall.c < 0) {
+					fireBall.c = N + fireBall.c;
+				}
+				
+				// 중복 위치 체크
 				if (board[fireBall.r][fireBall.c] == null) {
-					board[fireBall.r][fireBall.c] = new Block(fireBall.m);
+					board[fireBall.r][fireBall.c] = new Block(fireBall.m, fireBall.s, fireBall.d % 2);
 					board[fireBall.r][fireBall.c].idxList.add(i); 
-					
 				}
 				else {
 					board[fireBall.r][fireBall.c].m += fireBall.m;
+					board[fireBall.r][fireBall.c].s += fireBall.s;
+					if (board[fireBall.r][fireBall.c].d != fireBall.d % 2)
+						board[fireBall.r][fireBall.c].isSame = false;
 					board[fireBall.r][fireBall.c].idxList.add(i);
-					
-					fireBallList.get(i).m = 0;
 				}
 			}
 			
@@ -108,12 +130,34 @@ public class Problem {
 						continue;
 					}
 					
+					// 2개 이상의 파이어볼 처리
+					// 무게 초기화
+					for (int i = 0; i < board[row][col].idxList.size(); i++) {
+						fireBallList.get(board[row][col].idxList.get(i)).m = 0;
+					}
 					
+					int splitM = board[row][col].m / 5;
+					int splitS = board[row][col].s / board[row][col].idxList.size();
+					int dir = board[row][col].isSame ? 0 : 1;
+
+					for (int i = 0; i < 4; i++) {
+						if (splitM == 0) {
+							continue;
+						}
+						fireBallList.add(new FireBall(row, col, splitM, splitS, dir));
+						dir += 2;
+					}
 				}
 			}
 			
 		}
 		
+		int ans = 0;
+		for (FireBall fireBall : fireBallList) {
+			ans += fireBall.m;
+		}
+		
+		System.out.println(ans);
 		
 		
 	}
