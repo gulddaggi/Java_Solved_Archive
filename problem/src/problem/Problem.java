@@ -5,10 +5,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Problem {
-	static List<Integer>[] graph;
-	static boolean[] visit;
-	static int ans;
-
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		
@@ -17,7 +13,7 @@ public class Problem {
 			int N = sc.nextInt();
 			int M = sc.nextInt();
 			
-			graph = new ArrayList[N+1];
+			List<Integer>[] graph = new ArrayList[N+1];
 			
 			for (int idx = 1; idx <= N; idx++) {
 				graph[idx] = new ArrayList<>();
@@ -31,32 +27,29 @@ public class Problem {
 				graph[b].add(a);
 			}
 			
-			ans = 0;
-			visit = new boolean[N+1];
+			boolean[] visit = new boolean[N+1];
+			visit[1] = true;
+						
+			int ans = 0;
 			
-			dfs(1, 0);
-			
-			
-			System.out.println("#" + testCase + " " + (ans-1));
-		}
-		
-	}
-	
-	static void dfs(int v, int depth) {
-		if (depth == 3) {
-			return;
-		}
-		
-		if (!visit[v]) {
-			++ans;
-		}
-		
-		visit[v] = true;
-		
-		for (int nxt : graph[v]) {
-			if (nxt != 1) {
-				dfs(nxt, depth + 1);
+			for (int v : graph[1]) {
+				if (!visit[v]) {
+					++ans;
+				}
+				
+				visit[v] = true;
+				
+				for (int nxt : graph[v]) {
+					if (!visit[nxt]) {
+						++ans;
+					}
+					
+					visit[nxt] = true;
+				}
 			}
+			
+			System.out.println("#" + testCase + " " + ans);
 		}
+		
 	}
 }
