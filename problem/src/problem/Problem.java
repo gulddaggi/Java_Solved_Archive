@@ -102,6 +102,7 @@ public class Problem {
 				valueCheck[val] = false;
 				--directionCheck[i];
 			}
+			
 		}
 	}
 }
