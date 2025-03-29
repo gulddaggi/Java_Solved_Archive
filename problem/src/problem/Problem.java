@@ -1,5 +1,11 @@
 package problem;
 
+/*
+ 문제 : 1662(압축)
+ 시간 : 168ms
+ 풀이 : 문자열을 순회하며 여는 괄호를 만날 경우 그 뒤 부분 문자열에 대해 압축해제를 수행하여 문자열 길이를 계산
+ */
+
 import java.util.Scanner;
 import java.util.Stack;
 
