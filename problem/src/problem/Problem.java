@@ -1,5 +1,13 @@
 package problem;
 
+/*
+ 문제 : 13460(구슬 탈출 2)
+ 시간 : 1060ms
+ 풀이 : 이동 가능한 방향으로 두 구슬을 이동시키며 최소 횟수를 계산.
+ 
+ ※ 자료구조에 객체 타입을 삽입할 땐 새로 생성해서 넣자...그렇지 않으면 원본 값이 변경된다...
+ */
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -117,11 +125,6 @@ public class Problem {
 		bfs:
 		while (!q.isEmpty()) {
 			Move cur = q.poll();
-			
-			// 10번 초과한 경우 패스
- 			if (cur.count > 10) {
-				continue;
- 			}
 			
 			// 해당 방향으로 쭉 이동			
 			while (true) {
