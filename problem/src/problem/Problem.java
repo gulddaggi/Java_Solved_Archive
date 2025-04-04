@@ -1,5 +1,11 @@
 package problem;
 
+/*
+ 문제 : 17472(다리 만들기 2)
+ 시간 : 108ms
+ 풀이 : 섬을 파악한 후 각 섬에서 단방향으로 다른 섬에 도달하는 간선을 생성한 뒤, 최소 신장 트리를 구성하여 최솟값 계산
+ */
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
