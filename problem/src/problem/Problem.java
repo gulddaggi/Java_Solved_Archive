@@ -1,5 +1,13 @@
 package problem;
 
+/*
+
+문제 : 15683(감시)
+시간 : 352ms
+풀이 : 각 CCTV 각 방향을 감시하는 경우에 대해 감시칸을 체크하고 최소 사각지대 칸을 계산
+
+ */
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
